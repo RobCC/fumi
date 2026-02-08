@@ -1,0 +1,59 @@
+.notes-list {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 80px 24px 40px;
+  font-family: system-ui, sans-serif;
+}
+
+.notes-list h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+.notes-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.note-item {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.note-item:hover {
+  opacity: 0.7;
+}
+
+.note-preview {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.note-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.note-delete {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 2px 6px;
+}
+
+.note-delete:hover {
+  color: #e55;
+}
