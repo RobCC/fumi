@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useStore } from "../store";
 import "./Toolbar.css";
 
@@ -20,14 +21,16 @@ export default function Toolbar() {
   const hasText = useStore((s) => s.note.text.length > 0);
   const toolbarVisible = useStore((s) => s.toolbarVisible);
   const newNote = useStore((s) => s.newNote);
-  const finish = useStore((s) => s.finish);
   const backToWrite = useStore((s) => s.backToWrite);
   const showNotes = useStore((s) => s.showNotes);
   const exportNote = useStore((s) => s.exportNote);
-  const continueWriting = useStore((s) => s.continueWriting);
-
-  // always show toolbar in notes/review view
+  // always show toolbar in notes view
   const visible = view !== "write" || toolbarVisible;
+
+  const handleNewNote = useCallback(() => {
+    newNote();
+    document.getElementById("writer-text")?.focus();
+  }, [newNote]);
 
   return (
     <div className={`toolbar${visible ? " toolbar--visible" : ""}`}>
@@ -35,16 +38,8 @@ export default function Toolbar() {
       <div className="toolbar-actions">
         {view === "write" && (
           <>
-            {hasText && <button onClick={finish}>Finish</button>}
-            <button onClick={showNotes}>Notes</button>
-            <ThemeSwitchButton />
-          </>
-        )}
-        {view === "review" && (
-          <>
-            <button onClick={continueWriting}>Continue</button>
-            <button onClick={exportNote}>Export .txt</button>
-            <button onClick={newNote}>New note</button>
+            {hasText && <button onClick={exportNote}>Export .txt</button>}
+            {hasText && <button onClick={handleNewNote}>New note</button>}
             <button onClick={showNotes}>Notes</button>
             <ThemeSwitchButton />
           </>

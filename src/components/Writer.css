@@ -27,11 +27,6 @@
   word-break: break-word;
 }
 
-.writer--review .writer-char {
-  animation: none;
-  opacity: 1;
-}
-
 @keyframes fade-out {
   0% {
     opacity: 1;

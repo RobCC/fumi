@@ -15,7 +15,6 @@ const BLOCKED_KEYS = new Set([
 
 export default function Writer() {
   const text = useStore((s) => s.note.text);
-  const isReview = useStore((s) => s.view === "review");
   const setText = useStore((s) => s.setText);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,18 +25,14 @@ export default function Writer() {
   }, []);
 
   useEffect(() => {
-    if (!isReview) {
-      containerRef.current?.focus();
-    }
-  }, [isReview]);
+    containerRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
   }, [text, scrollToBottom]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (isReview) return;
-
     if (BLOCKED_KEYS.has(e.key)) {
       e.preventDefault();
       return;
@@ -70,9 +65,7 @@ export default function Writer() {
   };
 
   const handleContextMenu = (e: React.MouseEvent) => {
-    if (!isReview) {
-      e.preventDefault();
-    }
+    e.preventDefault();
   };
 
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
@@ -89,18 +82,16 @@ export default function Writer() {
     <>
       <div
         ref={containerRef}
-        className={`writer${isReview ? " writer--review" : ""}`}
+        className="writer"
         tabIndex={0}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
         onContextMenu={handleContextMenu}
       >
-        {text.length === 0 && !isReview && (
-          <span className="writer-placeholder">Just start writing...</span>
-        )}
-        <div className="writer-text">
+        {text.length === 0 && <span className="writer-placeholder"></span>}
+        <div id="writer-text" className="writer-text" tabIndex={0}>
           {renderChars()}
-          {!isReview && <span className="writer-cursor" />}
+          <span className="writer-cursor" />
         </div>
         <div ref={endRef} />
       </div>

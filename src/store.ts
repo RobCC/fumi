@@ -24,13 +24,11 @@ interface AppState {
 
   cycleTheme: () => void;
   setText: (text: string) => void;
-  finish: () => void;
   newNote: () => void;
   showNotes: () => void;
   backToWrite: () => void;
   selectNote: (note: Note) => void;
   deleteNote: (id: string) => void;
-  continueWriting: () => void;
   exportNote: () => void;
   showToolbar: () => void;
   hideToolbar: () => void;
@@ -79,18 +77,6 @@ export const useStore = create<AppState>((set, get) => ({
     }, 1000);
   },
 
-  finish: () => {
-    const { note } = get();
-
-    if (note.text.length > 0) {
-      const updated = updateNote(note);
-
-      set({ note: updated, notes: storage.loadNotes(), view: "review" });
-    } else {
-      set({ view: "review" });
-    }
-  },
-
   newNote: () => {
     set({ note: createNote(), view: "write" });
   },
@@ -107,11 +93,7 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   selectNote: (selected: Note) => {
-    set({ note: selected, view: "review" });
-  },
-
-  continueWriting: () => {
-    set({ view: "write" });
+    set({ note: selected, view: "write" });
   },
 
   deleteNote: (id: string) => {
