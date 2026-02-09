@@ -21,7 +21,15 @@ export default function App() {
         <Toolbar />
       </div>
 
-      <div onTouchStart={hideToolbar}>
+      <div
+        style={{ minHeight: "100%" }}
+        onTouchStart={hideToolbar}
+        onClick={() => {
+          if (view === "write") {
+            document.getElementById("writer-text")?.focus();
+          }
+        }}
+      >
         {view === "notes" ? <NotesList /> : <Writer />}
       </div>
     </div>
