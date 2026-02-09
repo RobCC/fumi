@@ -21,7 +21,6 @@
 }
 
 .toolbar-brand {
-  font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--text-muted);
@@ -35,20 +34,6 @@
 }
 
 .toolbar-actions button {
-  font-family: system-ui, sans-serif;
-}
-
-.toolbar-divider {
-  width: 1px;
-  height: 20px;
-  background: var(--border);
-  margin: 0 4px;
-}
-
-.theme-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
+  font-size: 1.5rem;
   font-family: system-ui, sans-serif;
 }

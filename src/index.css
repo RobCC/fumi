@@ -90,6 +90,3 @@ button:hover {
   color: var(--text);
 }
 
-.toolbar-divider {
-  transition: background 0.3s ease;
-}

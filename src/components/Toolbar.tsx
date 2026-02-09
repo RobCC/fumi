@@ -3,16 +3,12 @@ import { useStore } from "../store";
 import "./Toolbar.css";
 
 const ThemeSwitchButton = () => {
-  const theme = useStore((s) => s.theme);
   const cycleTheme = useStore((s) => s.cycleTheme);
 
   return (
-    <>
-      <div className="toolbar-divider" />
-      <button onClick={cycleTheme}>
-        <span className="theme-label">{theme}</span>
-      </button>
-    </>
+    <button onClick={cycleTheme} title="Theme">
+      ◑
+    </button>
   );
 };
 
@@ -38,15 +34,15 @@ export default function Toolbar() {
       <div className="toolbar-actions">
         {view === "write" && (
           <>
-            {hasText && <button onClick={exportNote}>Export</button>}
-            {hasText && <button onClick={handleNewNote}>New note</button>}
-            <button onClick={showNotes}>Notes</button>
+            {hasText && <button onClick={exportNote} title="Export">↓</button>}
+            {hasText && <button onClick={handleNewNote} title="New note">+</button>}
+            <button onClick={showNotes} title="Notes">☰</button>
             <ThemeSwitchButton />
           </>
         )}
         {view === "notes" && (
           <>
-            <button onClick={backToWrite}>Write</button>
+            <button onClick={backToWrite} title="Write">✎</button>
             <ThemeSwitchButton />
           </>
         )}

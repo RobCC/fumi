@@ -47,8 +47,9 @@ export default function NotesList() {
               className="note-delete"
               onClick={(e) => handleDelete(e, note.id)}
               aria-label="Delete note"
+              title="Delete"
             >
-              Delete
+              ✕
             </button>
           </div>
         </div>
