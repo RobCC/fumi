@@ -23,7 +23,7 @@ export default function Writer() {
   const scrollToBottom = useCallback(() => {
     textAreaRef.current?.scrollTo({
       top: textAreaRef.current.scrollHeight,
-      behavior: "smooth",
+      behavior: "instant",
     });
   }, []);
 

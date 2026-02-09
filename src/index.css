@@ -20,7 +20,7 @@
 /* Themes */
 [data-theme="dark"] {
   --bg: #1a1a1a;
-  --text: #e8e2dc;
+  --text: #efebe7;
   --text-faded: rgba(224, 224, 224, 0.15);
   --text-muted: rgba(224, 224, 224, 0.4);
   --toolbar-bg: rgba(26, 26, 26, 0.95);

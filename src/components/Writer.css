@@ -18,6 +18,7 @@
   left: 0;
   right: 0;
   height: calc(var(--text-line-height) * 6rem);
+  /* background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%); */
   background-color: var(--bg);
   mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 0%, transparent 100%);
@@ -41,7 +42,6 @@
   font-family: "IM Fell English", "Georgia", serif;
   width: 100%;
   overflow: hidden;
-  transition: padding-top 1s ease;
 }
 
 .word-count {
