@@ -16,23 +16,24 @@ const BLOCKED_KEYS = new Set([
 export default function Writer() {
   const text = useStore((s) => s.note.text);
   const setText = useStore((s) => s.setText);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const endRef = useRef<HTMLDivElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const scrollToBottom = useCallback(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    textAreaRef.current?.scrollTo({
+      top: textAreaRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, []);
 
   useEffect(() => {
-    containerRef.current?.focus();
+    textAreaRef.current?.focus();
   }, []);
 
   useEffect(() => {
     scrollToBottom();
   }, [text, scrollToBottom]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (BLOCKED_KEYS.has(e.key)) {
       e.preventDefault();
       return;
@@ -68,32 +69,25 @@ export default function Writer() {
     e.preventDefault();
   };
 
-  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
-
-  const renderChars = () => {
-    return text.split("").map((char, i) => (
-      <span key={i} className="writer-char">
-        {char}
-      </span>
-    ));
-  };
+  const trimmed = text.trim();
+  const wordCount = trimmed ? trimmed.split(/\s+/).length : 0;
 
   return (
     <>
-      <div
-        ref={containerRef}
-        className="writer"
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
-        onPaste={handlePaste}
-        onContextMenu={handleContextMenu}
-      >
+      <div className="writer">
         {text.length === 0 && <span className="writer-placeholder"></span>}
-        <div id="writer-text" className="writer-text" tabIndex={0}>
-          {renderChars()}
-          <span className="writer-cursor" />
-        </div>
-        <div ref={endRef} />
+        <textarea
+          placeholder="..."
+          id="writer-text"
+          className="text-area"
+          tabIndex={0}
+          spellCheck={false}
+          value={text}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
+          onContextMenu={handleContextMenu}
+          ref={textAreaRef}
+        ></textarea>
       </div>
       {wordCount > 0 && (
         <div className="word-count">

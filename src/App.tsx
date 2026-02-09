@@ -1,8 +1,8 @@
-import { useStore } from './store';
-import Writer from './components/Writer';
-import Toolbar from './components/Toolbar';
-import NotesList from './components/NotesList';
-import './App.css';
+import { useStore } from "./store";
+import Writer from "./components/Writer";
+import Toolbar from "./components/Toolbar";
+import NotesList from "./components/NotesList";
+import "./App.css";
 
 export default function App() {
   const view = useStore((s) => s.view);
@@ -20,7 +20,7 @@ export default function App() {
         <Toolbar />
       </div>
 
-      {view === 'notes' ? <NotesList /> : <Writer />}
+      {view === "notes" ? <NotesList /> : <Writer />}
     </div>
   );
 }

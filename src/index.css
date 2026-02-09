@@ -14,6 +14,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --text-line-height: 2.3;
 }
 
 /* Themes */
@@ -29,11 +30,11 @@
 }
 
 [data-theme="light"] {
-  --bg: #fafafa;
+  --bg: #f2f2f2;
   --text: #1a1a1a;
   --text-faded: rgba(26, 26, 26, 0.15);
   --text-muted: rgba(26, 26, 26, 0.4);
-  --toolbar-bg: rgba(250, 250, 250, 0.95);
+  --toolbar-bg: rgba(242, 242, 242, 0.95);
   --border: rgba(0, 0, 0, 0.1);
   --btn-bg: rgba(0, 0, 0, 0.05);
   --btn-hover: rgba(0, 0, 0, 0.1);
@@ -89,4 +90,3 @@ button {
 button:hover {
   color: var(--text);
 }
-
