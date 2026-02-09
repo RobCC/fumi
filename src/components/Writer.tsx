@@ -13,6 +13,8 @@ const BLOCKED_KEYS = new Set([
   "End",
 ]);
 
+const MAX_LINES = 7;
+
 export default function Writer() {
   const text = useStore((s) => s.note.text);
   const setText = useStore((s) => s.setText);
@@ -71,23 +73,32 @@ export default function Writer() {
 
   const trimmed = text.trim();
   const wordCount = trimmed ? trimmed.split(/\s+/).length : 0;
+  const lineCount = (text.match(/\n/g) || []).length + 1;
+  // const emptyLines = Math.max(0, Math.min(Math.floor(MAX_LINES / 2), MAX_LINES - lineCount));
+  const emptyLines = Math.max(0, MAX_LINES - lineCount);
 
   return (
     <>
       <div className="writer">
-        {text.length === 0 && <span className="writer-placeholder"></span>}
-        <textarea
-          placeholder="..."
-          id="writer-text"
-          className="text-area"
-          tabIndex={0}
-          spellCheck={false}
-          value={text}
-          onKeyDown={handleKeyDown}
-          onPaste={handlePaste}
-          onContextMenu={handleContextMenu}
-          ref={textAreaRef}
-        ></textarea>
+        <div className="writer-inner">
+          <div className="writer-fade" aria-hidden="true" />
+          <textarea
+            placeholder="..."
+            id="writer-text"
+            className="text-area"
+            tabIndex={0}
+            spellCheck={false}
+            value={text}
+            onChange={() => {}}
+            onKeyDown={handleKeyDown}
+            onPaste={handlePaste}
+            onContextMenu={handleContextMenu}
+            ref={textAreaRef}
+            style={{
+              paddingTop: `calc(var(--text-line-height) * ${emptyLines}rem)`,
+            }}
+          ></textarea>
+        </div>
       </div>
       {wordCount > 0 && (
         <div className="word-count">
