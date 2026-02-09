@@ -37,7 +37,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-family: 'Georgia', 'Times New Roman', serif;
+  font-family: "IM Fell English", "Georgia", serif;
 }
 
 .note-meta {
@@ -51,7 +51,13 @@
 .note-delete {
   font-size: 0.75rem;
   color: var(--text-muted);
+  opacity: 0;
   padding: 2px 6px;
+  transition: opacity 0.2s ease, color 0.3s ease;
+}
+
+.note-item:hover .note-delete {
+  opacity: 1;
 }
 
 .note-delete:hover {

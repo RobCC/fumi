@@ -116,7 +116,7 @@ export const useStore = create<AppState>((set, get) => ({
   hideToolbar: () => {
     const timer = window.setTimeout(() => {
       set({ toolbarVisible: false });
-    }, 1500);
+    }, 750);
     set({ _hideTimer: timer });
   },
 }));

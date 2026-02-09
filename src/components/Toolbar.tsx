@@ -38,7 +38,7 @@ export default function Toolbar() {
       <div className="toolbar-actions">
         {view === "write" && (
           <>
-            {hasText && <button onClick={exportNote}>Export .txt</button>}
+            {hasText && <button onClick={exportNote}>Export</button>}
             {hasText && <button onClick={handleNewNote}>New note</button>}
             <button onClick={showNotes}>Notes</button>
             <ThemeSwitchButton />

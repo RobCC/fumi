@@ -21,9 +21,10 @@
 }
 
 .toolbar-brand {
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 400;
   letter-spacing: 0.05em;
+  color: var(--text-muted);
   font-family: system-ui, sans-serif;
 }
 

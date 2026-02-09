@@ -78,16 +78,16 @@ button {
   font-family: inherit;
   cursor: pointer;
   border: none;
-  background: var(--btn-bg);
-  color: var(--text);
-  padding: 0.4em 0.8em;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.4em 0.6em;
   border-radius: 4px;
-  font-size: 0.85rem;
-  transition: background 0.3s ease, color 0.3s ease;
+  font-size: 0.8rem;
+  transition: color 0.3s ease;
 }
 
 button:hover {
-  background: var(--btn-hover);
+  color: var(--text);
 }
 
 .toolbar-divider {
