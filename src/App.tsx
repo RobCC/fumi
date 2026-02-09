@@ -15,12 +15,15 @@ export default function App() {
         className="hover-zone"
         onMouseEnter={showToolbar}
         onMouseLeave={hideToolbar}
+        onTouchStart={showToolbar}
       />
-      <div onMouseEnter={showToolbar} onMouseLeave={hideToolbar}>
+      <div onMouseEnter={showToolbar} onMouseLeave={hideToolbar} onTouchStart={showToolbar}>
         <Toolbar />
       </div>
 
-      {view === "notes" ? <NotesList /> : <Writer />}
+      <div onTouchStart={hideToolbar}>
+        {view === "notes" ? <NotesList /> : <Writer />}
+      </div>
     </div>
   );
 }
