@@ -1,13 +1,22 @@
+import { useCallback } from "react";
 import { useStore } from "./store";
 import Writer from "./components/Writer";
 import Toolbar from "./components/Toolbar";
 import NotesList from "./components/NotesList";
 import "./App.css";
 
+const contentStyle = { minHeight: "100%" } as const;
+
 export default function App() {
   const view = useStore((s) => s.view);
   const showToolbar = useStore((s) => s.showToolbar);
   const hideToolbar = useStore((s) => s.hideToolbar);
+
+  const handleContentClick = useCallback(() => {
+    if (view === "write") {
+      document.getElementById("writer-text")?.focus();
+    }
+  }, [view]);
 
   return (
     <div className="app">
@@ -22,13 +31,9 @@ export default function App() {
       </div>
 
       <div
-        style={{ minHeight: "100%" }}
+        style={contentStyle}
         onTouchStart={hideToolbar}
-        onClick={() => {
-          if (view === "write") {
-            document.getElementById("writer-text")?.focus();
-          }
-        }}
+        onClick={handleContentClick}
       >
         {view === "notes" ? <NotesList /> : <Writer />}
       </div>

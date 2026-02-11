@@ -14,6 +14,7 @@ const BLOCKED_KEYS = new Set([
 ]);
 
 const MAX_LINES = 7;
+const noop = () => {};
 
 export default function Writer() {
   const text = useStore((s) => s.note.text);
@@ -83,6 +84,11 @@ export default function Writer() {
     return { wordCount: wc, emptyLines: Math.max(0, MAX_LINES - lc) };
   }, [text]);
 
+  const textAreaStyle = useMemo(
+    () => ({ paddingTop: `calc(var(--text-line-height) * ${emptyLines}rem)` }),
+    [emptyLines],
+  );
+
   return (
     <>
       <div className="writer">
@@ -95,14 +101,12 @@ export default function Writer() {
             tabIndex={0}
             spellCheck={false}
             value={text}
-            onChange={() => {}}
+            onChange={noop}
             onKeyDown={handleKeyDown}
             onPaste={handlePaste}
             onContextMenu={handleContextMenu}
             ref={textAreaRef}
-            style={{
-              paddingTop: `calc(var(--text-line-height) * ${emptyLines}rem)`,
-            }}
+            style={textAreaStyle}
           ></textarea>
         </div>
       </div>
