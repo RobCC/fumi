@@ -41,10 +41,10 @@ function updateNote(note: Note) {
     return;
   }
 
-  const updated = { ...note, updatedAt: new Date().toISOString() };
-  storage.saveNote(updated);
+  const updatedStorage = { ...note, updatedAt: new Date().toISOString() };
+  storage.saveNote(updatedStorage);
 
-  return updated;
+  return updatedStorage;
 }
 
 export const useStore = create<AppState>((set, get) => ({
@@ -71,13 +71,24 @@ export const useStore = create<AppState>((set, get) => ({
 
     autoSaveTimer = window.setTimeout(() => {
       const { note } = get();
-      const updated = updateNote(note);
+      const updatedStorage = updateNote(note);
 
-      set({ note: updated, notes: storage.loadNotes() });
+      if (updatedStorage) {
+        set((s) => ({
+          note: updatedStorage,
+          notes: s.notes.some((n) => n.id === updatedStorage.id)
+            ? s.notes.map((n) => (n.id === updatedStorage.id ? updatedStorage : n))
+            : [...s.notes, updatedStorage],
+        }));
+      }
     }, 1000);
   },
 
   newNote: () => {
+    if (autoSaveTimer) {
+      window.clearTimeout(autoSaveTimer);
+      autoSaveTimer = null;
+    }
     set({ note: createNote(), view: "write" });
   },
 
@@ -98,7 +109,7 @@ export const useStore = create<AppState>((set, get) => ({
 
   deleteNote: (id: string) => {
     storage.deleteNote(id);
-    set({ notes: storage.loadNotes() });
+    set((s) => ({ notes: s.notes.filter((n) => n.id !== id) }));
   },
 
   exportNote: () => {

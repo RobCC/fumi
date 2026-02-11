@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useMemo } from "react";
 import { useStore } from "../store";
 import "./Writer.css";
 
@@ -18,6 +18,7 @@ const MAX_LINES = 7;
 export default function Writer() {
   const text = useStore((s) => s.note.text);
   const setText = useStore((s) => s.setText);
+  const textRef = useRef(text);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const scrollToBottom = useCallback(() => {
@@ -32,50 +33,55 @@ export default function Writer() {
   }, []);
 
   useEffect(() => {
+    textRef.current = text;
     scrollToBottom();
   }, [text, scrollToBottom]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (BLOCKED_KEYS.has(e.key)) {
-      e.preventDefault();
-      return;
-    }
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (BLOCKED_KEYS.has(e.key)) {
+        e.preventDefault();
+        return;
+      }
 
-    if ((e.ctrlKey || e.metaKey) && e.key === "a") {
-      e.preventDefault();
-      return;
-    }
+      if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+        e.preventDefault();
+        return;
+      }
 
-    if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "y")) {
-      e.preventDefault();
-      return;
-    }
+      if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "y")) {
+        e.preventDefault();
+        return;
+      }
 
-    if (e.key === "Enter") {
-      e.preventDefault();
-      setText(text + "\n");
-      return;
-    }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        setText(textRef.current + "\n");
+        return;
+      }
 
-    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
-      e.preventDefault();
-      setText(text + e.key);
-    }
-  };
+      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        setText(textRef.current + e.key);
+      }
+    },
+    [setText],
+  );
 
-  const handlePaste = (e: React.ClipboardEvent) => {
+  const handlePaste = useCallback((e: React.ClipboardEvent) => {
     e.preventDefault();
-  };
+  }, []);
 
-  const handleContextMenu = (e: React.MouseEvent) => {
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-  };
+  }, []);
 
-  const trimmed = text.trim();
-  const wordCount = trimmed ? trimmed.split(/\s+/).length : 0;
-  const lineCount = (text.match(/\n/g) || []).length + 1;
-  // const emptyLines = Math.max(0, Math.min(Math.floor(MAX_LINES / 2), MAX_LINES - lineCount));
-  const emptyLines = Math.max(0, MAX_LINES - lineCount);
+  const { wordCount, emptyLines } = useMemo(() => {
+    const trimmed = text.trim();
+    const wc = trimmed ? trimmed.split(/\s+/).length : 0;
+    const lc = (text.match(/\n/g) || []).length + 1;
+    return { wordCount: wc, emptyLines: Math.max(0, MAX_LINES - lc) };
+  }, [text]);
 
   return (
     <>
