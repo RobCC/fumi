@@ -30,7 +30,11 @@ export default function Writer() {
   }, []);
 
   useEffect(() => {
-    textAreaRef.current?.focus();
+    const el = textAreaRef.current;
+    if (el) {
+      el.focus();
+      el.selectionStart = el.selectionEnd = el.value.length;
+    }
   }, []);
 
   useEffect(() => {
