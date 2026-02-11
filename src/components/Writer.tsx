@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useMemo } from "react";
 import { useStore } from "../store";
 import "./Writer.css";
 
@@ -13,87 +13,102 @@ const BLOCKED_KEYS = new Set([
   "End",
 ]);
 
+const MAX_LINES = 7;
+const noop = () => {};
+
 export default function Writer() {
   const text = useStore((s) => s.note.text);
   const setText = useStore((s) => s.setText);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const endRef = useRef<HTMLDivElement>(null);
+  const textRef = useRef(text);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const scrollToBottom = useCallback(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    textAreaRef.current?.scrollTo({
+      top: textAreaRef.current.scrollHeight,
+      behavior: "instant",
+    });
   }, []);
 
   useEffect(() => {
-    containerRef.current?.focus();
+    textAreaRef.current?.focus();
   }, []);
 
   useEffect(() => {
+    textRef.current = text;
     scrollToBottom();
   }, [text, scrollToBottom]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (BLOCKED_KEYS.has(e.key)) {
-      e.preventDefault();
-      return;
-    }
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (BLOCKED_KEYS.has(e.key)) {
+        e.preventDefault();
+        return;
+      }
 
-    if ((e.ctrlKey || e.metaKey) && e.key === "a") {
-      e.preventDefault();
-      return;
-    }
+      if ((e.ctrlKey || e.metaKey) && e.key === "a") {
+        e.preventDefault();
+        return;
+      }
 
-    if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "y")) {
-      e.preventDefault();
-      return;
-    }
+      if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "y")) {
+        e.preventDefault();
+        return;
+      }
 
-    if (e.key === "Enter") {
-      e.preventDefault();
-      setText(text + "\n");
-      return;
-    }
+      if (e.key === "Enter") {
+        e.preventDefault();
+        setText(textRef.current + "\n");
+        return;
+      }
 
-    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
-      e.preventDefault();
-      setText(text + e.key);
-    }
-  };
+      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        setText(textRef.current + e.key);
+      }
+    },
+    [setText],
+  );
 
-  const handlePaste = (e: React.ClipboardEvent) => {
+  const handlePaste = useCallback((e: React.ClipboardEvent) => {
     e.preventDefault();
-  };
+  }, []);
 
-  const handleContextMenu = (e: React.MouseEvent) => {
+  const handleContextMenu = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
-  };
+  }, []);
 
-  const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const { wordCount, emptyLines } = useMemo(() => {
+    const trimmed = text.trim();
+    const wc = trimmed ? trimmed.split(/\s+/).length : 0;
+    const lc = (text.match(/\n/g) || []).length + 1;
+    return { wordCount: wc, emptyLines: Math.max(0, MAX_LINES - lc) };
+  }, [text]);
 
-  const renderChars = () => {
-    return text.split("").map((char, i) => (
-      <span key={i} className="writer-char">
-        {char}
-      </span>
-    ));
-  };
+  const textAreaStyle = useMemo(
+    () => ({ paddingTop: `calc(var(--text-line-height) * ${emptyLines}rem)` }),
+    [emptyLines],
+  );
 
   return (
     <>
-      <div
-        ref={containerRef}
-        className="writer"
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
-        onPaste={handlePaste}
-        onContextMenu={handleContextMenu}
-      >
-        {text.length === 0 && <span className="writer-placeholder"></span>}
-        <div id="writer-text" className="writer-text" tabIndex={0}>
-          {renderChars()}
-          <span className="writer-cursor" />
+      <div className="writer">
+        <div className="writer-inner">
+          <div className="writer-fade" aria-hidden="true" />
+          <textarea
+            placeholder="..."
+            id="writer-text"
+            className="text-area"
+            tabIndex={0}
+            spellCheck={false}
+            value={text}
+            onChange={noop}
+            onKeyDown={handleKeyDown}
+            onPaste={handlePaste}
+            onContextMenu={handleContextMenu}
+            ref={textAreaRef}
+            style={textAreaStyle}
+          ></textarea>
         </div>
-        <div ref={endRef} />
       </div>
       {wordCount > 0 && (
         <div className="word-count">

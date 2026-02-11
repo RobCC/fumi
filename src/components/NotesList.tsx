@@ -13,7 +13,8 @@ function formatDate(iso: string): string {
 }
 
 function wordCount(text: string): number {
-  return text.trim() ? text.trim().split(/\s+/).length : 0;
+  const trimmed = text.trim();
+  return trimmed ? trimmed.split(/\s+/).length : 0;
 }
 
 export default function NotesList() {
